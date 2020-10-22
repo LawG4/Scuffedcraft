@@ -3,7 +3,7 @@
 #Shortcut to the tools folder
 *.lnk
 #Vscode directory
-.vscode/
+.vscode/*
 
 # Prerequisites
 *.d
