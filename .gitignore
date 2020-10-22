@@ -2,6 +2,8 @@
 *.dol
 #Shortcut to the tools folder
 *.lnk
+#Vscode directory
+.vscode/
 
 # Prerequisites
 *.d
