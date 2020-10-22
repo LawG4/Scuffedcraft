@@ -1,3 +1,8 @@
+#The actual dolphin build
+*.dol
+#Shortcut to the tools folder
+*.lnk
+
 # Prerequisites
 *.d
 
