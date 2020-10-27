@@ -1,14 +1,17 @@
-//=====================================================================================
-//This subsection of code is all for rendering, so far it is limited to 
-//just rendering the cubes, but it will also handle the cubes as 
-//that would be too much abstraction
-//=====================================================================================
+//=======================================================================================
+//This subsection of code is all for rendering, so far it is limited to                 =
+//just rendering the cubes, but it will also handle the cubes as                        =
+//that would be too much abstraction                                                    =
+//=======================================================================================
 
 #include "RenderManager.h"
 #include "gfx/albedo_cube.h"
 
-//Global variables for the faces, to be refered to lots later.
-//Just as a note to myself the vertices are all sent clockwise for future texture coordinates.
+
+
+//=======================================================================================
+//= Global variables                                                                    =
+//=======================================================================================
 //----------------------------  x1     x2     x3     x4     y1     y2     y3     y4     z1     z2     z3    z4
 struct Face_VT Face_Cube_N = {-1.0f,  1.0f,  1.0f, -1.0f,  1.0f,  1.0f, -1.0f, -1.0f,  1.0f,  1.0f,  1.0f,  1.0f};
 struct Face_VT Face_Cube_S = { 1.0f, -1.0f, -1.0f,  1.0f,  1.0f,  1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f};
@@ -16,6 +19,65 @@ struct Face_VT Face_Cube_T = {-1.0f,  1.0f,  1.0f, -1.0f,  1.0f,  1.0f,  1.0f,  
 struct Face_VT Face_Cube_B = {-1.0f,  1.0f,  1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f,  1.0f,  1.0f, -1.0f, -1.0f};
 struct Face_VT Face_Cube_E = {-1.0f, -1.0f, -1.0f, -1.0f,  1.0f,  1.0f, -1.0f, -1.0f, -1.0f,  1.0f,  1.0f, -1.0f};
 struct Face_VT Face_Cube_W = { 1.0f,  1.0f,  1.0f,  1.0f,  1.0f,  1.0f, -1.0f, -1.0f,  1.0f, -1.0f, -1.0f,  1.0f};
+
+//-----------------------------x1    x2     x3   x4    y1    y2    y3    y4
+struct Face_TX grass_Tex_T = {0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.5f, 0.5f}; //Top grass texture
+struct Face_TX grass_Tex_A = {0.0f, 1.0f, 1.0f, 0.0f, 0.5f, 0.5f, 1.0f, 1.0f}; //Grass textures on the sides and also bottom
+
+
+
+//=======================================================================================
+//= Face and model support functions
+//=======================================================================================
+
+struct Face *createTranslatedFace(struct Face_VT baseVerticies, struct Face_TX baseTex, f32 offsetX, f32 offsetY, f32 offsetZ)
+{
+	//allocate the space required for the new face.
+	struct Face *face = malloc(sizeof(struct Face)); 
+	//now copy the baseVerticies into the new one
+	face->vt = baseVerticies;
+	face->tx = baseTex;
+	//now move all the base verticies by the offset.
+	face->vt.x1 = face->vt.x1 + offsetX;
+	face->vt.x2 = face->vt.x2 + offsetX;
+	face->vt.x3 = face->vt.x3 + offsetX;
+	face->vt.x4 = face->vt.x4 + offsetX;
+
+	face->vt.y1 = face->vt.y1 + offsetY;
+	face->vt.y2 = face->vt.y2 + offsetY;
+	face->vt.y3 = face->vt.y3 + offsetY;
+	face->vt.y4 = face->vt.y4 + offsetY;
+
+	face->vt.z1 = face->vt.z1 + offsetZ;
+	face->vt.z2 = face->vt.z2 + offsetZ;
+	face->vt.z3 = face->vt.z3 + offsetZ;
+	face->vt.z4 = face->vt.z4 + offsetZ;
+
+	return face;
+}
+
+void addFaceToModel(struct Model *model, struct Face *face)
+{
+	//simply take the new element and push it to be the first
+	//element in the linked list.
+	//TODO finish
+}
+
+void deleteModel(struct Model *model)
+{
+	//TODO finish
+}
+
+
+
+
+
+
+
+
+
+
+
 
 //So this will be the method to render a model. it renders the model at the centre coordinates
 //so an example of use will be that each chunk will share the same texture, and will consist 
@@ -66,24 +128,10 @@ struct Model makeTestCube()
 	//now lets fill in the texture coordinates
 	model.texCoords = malloc (6 * sizeof(struct Face_TX));
 	//each one uses the same texture coordinates 
-		model.texCoords[0].x1 = 0.0f;
-		model.texCoords[0].y1 = 0.0f;
-		model.texCoords[0].x2 = 1.0f;
-		model.texCoords[0].y2 = 0.0f;
-		model.texCoords[0].x3 = 1.0f;
-		model.texCoords[0].y3 = 0.5f;
-		model.texCoords[0].x4 = 0.0f;
-		model.texCoords[0].y4 = 0.5f;
+		model.texCoords[0] = grass_Tex_T;
 	for (size_t i = 1; i < 6; i++)
 	{
-		model.texCoords[i].x1 = 0.0f;
-		model.texCoords[i].y1 = 0.5f;
-		model.texCoords[i].x2 = 1.0f;
-		model.texCoords[i].y2 = 0.5f;
-		model.texCoords[i].x3 = 1.0f;
-		model.texCoords[i].y3 = 1.0f;
-		model.texCoords[i].x4 = 0.0f;
-		model.texCoords[i].y4 = 1.0f;
+		model.texCoords[i] = grass_Tex_A;
 	}
 	
 	//now give this model a texture 
