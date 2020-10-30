@@ -1,5 +1,7 @@
 #The actual dolphin build
 *.dol
+*.DOL
+Scuffedcraft.dol
 #Shortcut to the tools folder
 *.lnk
 #Vscode directory

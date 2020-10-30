@@ -27,7 +27,7 @@ struct Face_TX grass_Tex_A = {0.0f, 1.0f, 1.0f, 0.0f, 0.5f, 0.5f, 1.0f, 1.0f}; /
 
 
 //=======================================================================================
-//= Face and model support functions
+//= Face and model support functions                                                    =
 //=======================================================================================
 
 struct Face *createTranslatedFace(struct Face_VT baseVerticies, struct Face_TX baseTex, f32 offsetX, f32 offsetY, f32 offsetZ)
@@ -53,6 +53,8 @@ struct Face *createTranslatedFace(struct Face_VT baseVerticies, struct Face_TX b
 	face->vt.z3 = face->vt.z3 + offsetZ;
 	face->vt.z4 = face->vt.z4 + offsetZ;
 
+	face->next = NULL;
+
 	return face;
 }
 
@@ -60,24 +62,36 @@ void addFaceToModel(struct Model *model, struct Face *face)
 {
 	//simply take the new element and push it to be the first
 	//element in the linked list.
-	//TODO finish
+	//use a double pointer so that we can edit this pointer itself
+	//struct Face * nextFace = *face;
+	face->next = model->firstFace;
+	model->firstFace = face;
+	model->size++;
 }
 
-void deleteModel(struct Model *model)
+void deallocateModel(struct Model *model)
 {
-	//TODO finish
+	//take the first element of the model
+	struct Face *face = model->firstFace;
+	while(face != NULL)
+	{
+		//set the next face to be destroyed
+		struct Face *nextFace = face->next;
+		//destroy this face, one face has a set size, 
+		//so we can just free it because each face will be malloced
+		//instead of the components 
+		free(face);
+		//make the next one 
+		face = nextFace;
+	}
+	model->size = 0;
 }
 
 
 
-
-
-
-
-
-
-
-
+//=======================================================================================
+//= Rendering the models                                                                =
+//=======================================================================================
 
 //So this will be the method to render a model. it renders the model at the centre coordinates
 //so an example of use will be that each chunk will share the same texture, and will consist 
@@ -85,63 +99,84 @@ void deleteModel(struct Model *model)
 //own object to allow for face aligning.
 void renderModel(struct Model model )
 {
-	//loop over every face. and for now just draw it as a white square
-	//Begin the draw call
+	//Begin the draw call, model is drawn to local coordinates 
+	//unless it has it's location set outside this call.
+	//we still need the size of the model
 	GRRLIB_SetTexture(model.tex, 0);
 	GX_Begin(GX_QUADS, GX_VTXFMT0, model.size * 4);
 	
-	for (size_t i = 0; i < model.size; i++)
+	//set the first face 
+	struct Face *face = model.firstFace;
+	//loop through all the faces until the end.
+	while(face != NULL)
 	{
-		GX_Position3f32(model.faces[i].x1, model.faces[i].y1, model.faces[i].z1);
+		GX_Position3f32(face->vt.x1, face->vt.y1, face->vt.z1);
 		GX_Color1u32(0xFFFFFFFF);
-		GX_TexCoord2f32(model.texCoords[i].x1, model.texCoords[i].y1);
+		GX_TexCoord2f32(face->tx.x1, face->tx.y1);
 
-		GX_Position3f32(model.faces[i].x2, model.faces[i].y2, model.faces[i].z2);
+		GX_Position3f32(face->vt.x2, face->vt.y2,face->vt.z2);
 		GX_Color1u32(0xFFFFFFFF);
-		GX_TexCoord2f32(model.texCoords[i].x2, model.texCoords[i].y2);
+		GX_TexCoord2f32(face->tx.x2, face->tx.y2);
 
-		GX_Position3f32(model.faces[i].x3, model.faces[i].y3, model.faces[i].z3);
+		GX_Position3f32(face->vt.x3, face->vt.y3, face->vt.z3);
 		GX_Color1u32(0xFFFFFFFF);
-		GX_TexCoord2f32(model.texCoords[i].x3, model.texCoords[i].y3);
+		GX_TexCoord2f32(face->tx.x3, face->tx.y3);
 
-		GX_Position3f32(model.faces[i].x4, model.faces[i].y4, model.faces[i].z4);
+		GX_Position3f32(face->vt.x4, face->vt.y4, face->vt.z4);
 		GX_Color1u32(0xFFFFFFFF);
-		GX_TexCoord2f32(model.texCoords[i].x4, model.texCoords[i].y4);
+		GX_TexCoord2f32(face->tx.x4,face->tx.y4);
+
+		//set the next face
+		face = face->next;
 	}
 	GX_End();
 }
 
+//Replace the make test cube method to use the linked list method with an list adder
+//TODO : figure out why this isn't working
+//So far it's adding the face to the model that's not working.
 struct Model makeTestCube()
 {
-	//First lets create a cube based on the paramater
 	struct Model model;
-	model.size = 6;
-	model.faces = malloc(6 * sizeof(struct Face_VT)); //just one face for now
-
-	model.faces[0] = Face_Cube_T;
-	model.faces[1] = Face_Cube_B;
-	model.faces[2] = Face_Cube_N;
-	model.faces[3] = Face_Cube_S;
-	model.faces[4] = Face_Cube_E;
-	model.faces[5] = Face_Cube_W;
-
-	//now lets fill in the texture coordinates
-	model.texCoords = malloc (6 * sizeof(struct Face_TX));
-	//each one uses the same texture coordinates 
-		model.texCoords[0] = grass_Tex_T;
-	for (size_t i = 1; i < 6; i++)
-	{
-		model.texCoords[i] = grass_Tex_A;
-	}
-	
-	//now give this model a texture 
 	model.tex = GRRLIB_LoadTexture(albedo_cube);
-	//so now then let's render this bad boi
-	//return this model so we're not making it every turn
-	return model;
 
+	addFaceToModel(&model, createTranslatedFace(Face_Cube_T, grass_Tex_T, 0,0,0));
+	addFaceToModel(&model, createTranslatedFace(Face_Cube_B, grass_Tex_A, 0,0,0));
+	addFaceToModel(&model, createTranslatedFace(Face_Cube_N, grass_Tex_A, 0,0,0));
+	addFaceToModel(&model, createTranslatedFace(Face_Cube_S, grass_Tex_A, 0,0,0));
+	addFaceToModel(&model, createTranslatedFace(Face_Cube_E, grass_Tex_A, 0,0,0));
+	addFaceToModel(&model, createTranslatedFace(Face_Cube_W, grass_Tex_A, 0,0,0));
+	
+	return model;
 }
 
+/*
+struct Model makeTestCube()
+{
+	//Change the cube to use the face texture
+	struct Model model;
+	model.size = 6;
+	model.tex = GRRLIB_LoadTexture(albedo_cube);
+	struct Face *face1 = createTranslatedFace(Face_Cube_T, grass_Tex_T, 0,0,0);
+	struct Face *face2 = createTranslatedFace(Face_Cube_B, grass_Tex_A, 0,0,0);
+	struct Face *face3 = createTranslatedFace(Face_Cube_N, grass_Tex_A, 0,0,0);
+	struct Face *face4 = createTranslatedFace(Face_Cube_S, grass_Tex_A, 0,0,0);
+	struct Face *face5 = createTranslatedFace(Face_Cube_E, grass_Tex_A, 0,0,0);
+	struct Face *face6 = createTranslatedFace(Face_Cube_W, grass_Tex_A, 0,0,0);
+
+
+	//use the linked list model
+	model.firstFace = face1;
+	face1->next = face2;
+	face2->next = face3;
+	face3->next = face4;
+	face4->next = face5;
+	face5->next = face6;
+	face6->next = NULL;
+
+	return model;
+}
+*/
 void renderTestCube(struct Model model, f32 param, f32 x, f32 y, f32 z)
 {
 	GRRLIB_ObjectView(x,y,z,0,param,0,1,1,1);

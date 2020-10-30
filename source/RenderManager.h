@@ -41,10 +41,10 @@ struct Face{
 
 struct Model
 {
+	//Still need the size of the size of the model used for GRRLIB rendering
+	int size;
 	GRRLIB_texImg *tex;
-	struct Face_VT *faces;
-	struct Face_TX *texCoords;
-	int   size;
+	struct Face *firstFace;
 };
 
 
@@ -81,8 +81,8 @@ struct Face *createTranslatedFace(struct Face_VT baseVerticies, struct Face_TX b
 //in a model doesn't matter, so we can push the face to the front of the linked list.
 void addFaceToModel(struct Model *model, struct Face *face);
 
-//We need a method to deallocate the model's resources 
-void deleteModel(struct Model *model);
+//We need a method to deallocate the model's resources, not neccarily delete them 
+void dealocateModel(struct Model *model);
 
 //We'll add in methods to specifically clear the correct faces from the models 
 
