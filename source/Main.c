@@ -59,9 +59,9 @@ int main() {
         //GRRLIB_Camera3dSettings(13.0f * sin(a),0.0f,5.0f * cos(a), 0,1,0, 0,0,0);
         GRRLIB_3dMode(0.1,1000,70,0,0);
 
-        renderTestCube(testCube, 0,  2,  0,  4);
-        renderTestCube(testCube, 0,  0, -8,  0);
-        renderTestCube(testCube, 0,  0,  1, -4);
+        renderTestCube(testCube, a,  2,  0,  4);
+        renderTestCube(testCube, a,  0, -8,  0);
+        renderTestCube(testCube, a,  0,  1, -4);
         
         a+=1.0f;
 

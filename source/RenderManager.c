@@ -132,9 +132,7 @@ void renderModel(struct Model model )
 	GX_End();
 }
 
-//Replace the make test cube method to use the linked list method with an list adder
-//TODO : figure out why this isn't working
-//So far it's adding the face to the model that's not working.
+//Create a test cube by adding one face at a time. 
 struct Model makeTestCube()
 {
 	struct Model model;
@@ -150,35 +148,9 @@ struct Model makeTestCube()
 	return model;
 }
 
-/*
-struct Model makeTestCube()
-{
-	//Change the cube to use the face texture
-	struct Model model;
-	model.size = 6;
-	model.tex = GRRLIB_LoadTexture(albedo_cube);
-	struct Face *face1 = createTranslatedFace(Face_Cube_T, grass_Tex_T, 0,0,0);
-	struct Face *face2 = createTranslatedFace(Face_Cube_B, grass_Tex_A, 0,0,0);
-	struct Face *face3 = createTranslatedFace(Face_Cube_N, grass_Tex_A, 0,0,0);
-	struct Face *face4 = createTranslatedFace(Face_Cube_S, grass_Tex_A, 0,0,0);
-	struct Face *face5 = createTranslatedFace(Face_Cube_E, grass_Tex_A, 0,0,0);
-	struct Face *face6 = createTranslatedFace(Face_Cube_W, grass_Tex_A, 0,0,0);
-
-
-	//use the linked list model
-	model.firstFace = face1;
-	face1->next = face2;
-	face2->next = face3;
-	face3->next = face4;
-	face4->next = face5;
-	face5->next = face6;
-	face6->next = NULL;
-
-	return model;
-}
-*/
+//Render the test cube in a set position 
 void renderTestCube(struct Model model, f32 param, f32 x, f32 y, f32 z)
 {
-	GRRLIB_ObjectView(x,y,z,0,param,0,1,1,1);
+	GRRLIB_ObjectView(x,y,z,param,param,param,1,1,1);
 	renderModel(model);
 }
