@@ -7,22 +7,28 @@
 #include "RenderManager.h"
 #include "gfx/albedo_cube.h"
 
-
+#include <math.h>
 
 //=======================================================================================
 //= Global variables                                                                    =
 //=======================================================================================
 //----------------------------  x1     x2     x3     x4     y1     y2     y3     y4     z1     z2     z3    z4
-struct Face_VT Face_Cube_N = {-1.0f,  1.0f,  1.0f, -1.0f,  1.0f,  1.0f, -1.0f, -1.0f,  1.0f,  1.0f,  1.0f,  1.0f};
-struct Face_VT Face_Cube_S = { 1.0f, -1.0f, -1.0f,  1.0f,  1.0f,  1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f};
-struct Face_VT Face_Cube_T = {-1.0f,  1.0f,  1.0f, -1.0f,  1.0f,  1.0f,  1.0f,  1.0f,  1.0f,  1.0f, -1.0f, -1.0f};
-struct Face_VT Face_Cube_B = {-1.0f,  1.0f,  1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f,  1.0f,  1.0f, -1.0f, -1.0f};
-struct Face_VT Face_Cube_E = {-1.0f, -1.0f, -1.0f, -1.0f,  1.0f,  1.0f, -1.0f, -1.0f, -1.0f,  1.0f,  1.0f, -1.0f};
-struct Face_VT Face_Cube_W = { 1.0f,  1.0f,  1.0f,  1.0f,  1.0f,  1.0f, -1.0f, -1.0f,  1.0f, -1.0f, -1.0f,  1.0f};
+struct Face_VT Face_Cube_N = {-0.5f,  0.5f,  0.5f, -0.5f,  0.5f,  0.5f, -0.5f, -0.5f,  0.5f,  0.5f,  0.5f,  0.5f};
+struct Face_VT Face_Cube_S = { 0.5f, -0.5f, -0.5f,  0.5f,  0.5f,  0.5f, -0.5f, -0.5f, -0.5f, -0.5f, -0.5f, -0.5f};
+struct Face_VT Face_Cube_T = {-0.5f,  0.5f,  0.5f, -0.5f,  0.5f,  0.5f,  0.5f,  0.5f,  0.5f,  0.5f, -0.5f, -0.5f};
+struct Face_VT Face_Cube_B = {-0.5f,  0.5f,  0.5f, -0.5f, -0.5f, -0.5f, -0.5f, -0.5f,  0.5f,  0.5f, -0.5f, -0.5f};
+struct Face_VT Face_Cube_E = {-0.5f, -0.5f, -0.5f, -0.5f,  0.5f,  0.5f, -0.5f, -0.5f, -0.5f,  0.5f,  0.5f, -0.5f};
+struct Face_VT Face_Cube_W = { 0.5f,  0.5f,  0.5f,  0.5f,  0.5f,  0.5f, -0.5f, -0.5f,  0.5f, -0.5f, -0.5f,  0.5f};
 
-//-----------------------------x1    x2     x3   x4    y1    y2    y3    y4
+//-----------------------------x1    x2     x3   x4    y1    y2    y3    y4  
 struct Face_TX grass_Tex_T = {0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.5f, 0.5f}; //Top grass texture
 struct Face_TX grass_Tex_A = {0.0f, 1.0f, 1.0f, 0.0f, 0.5f, 0.5f, 1.0f, 1.0f}; //Grass textures on the sides and also bottom
+
+int CHUNK_X   = 16;
+int CHUNK_Y   = 32;
+int CHUNK_Z   = 16;
+int CHUNK_XY  = 16 * 32;
+int CHUNK_XYZ = 16 * 32 * 16;
 
 
 
@@ -130,6 +136,119 @@ void renderModel(struct Model model )
 		face = face->next;
 	}
 	GX_End();
+}
+
+
+//=======================================================================================
+//= Chunk and model handeling                                                           =
+//=======================================================================================
+
+struct Model createChunkModel(u8 *chunkData)
+{
+	//for now we only have a grass texture so if we come accross an integer that isn't 
+	//0 we add the 6 sets of faces to the chunk model to represent the grass block. 
+	struct Model model;
+	model.tex = GRRLIB_LoadTexture(albedo_cube);
+	for (size_t x = 0; x < CHUNK_X; x++)
+	{
+		for (size_t y = 0; y < CHUNK_Y; y++)
+		{
+			for (size_t z = 0; z < CHUNK_Z; z++)
+			{
+				//have we found a block that isn't air?
+				if(chunkData[(z * CHUNK_Y * CHUNK_X) + (y * CHUNK_X) + x] != 0)
+				{
+					//for now add every face to the model, in the future only add the 
+					//blocks that are touching air
+					addFaceToModel(&model, createTranslatedFace(Face_Cube_T, grass_Tex_T, x, y, z));
+					addFaceToModel(&model, createTranslatedFace(Face_Cube_B, grass_Tex_A, x, y, z));
+					addFaceToModel(&model, createTranslatedFace(Face_Cube_N, grass_Tex_A, x, y, z));
+					addFaceToModel(&model, createTranslatedFace(Face_Cube_S, grass_Tex_A, x, y, z));
+					addFaceToModel(&model, createTranslatedFace(Face_Cube_E, grass_Tex_A, x, y, z));
+					addFaceToModel(&model, createTranslatedFace(Face_Cube_W, grass_Tex_A, x, y, z));
+				}
+			}
+			
+		}
+		
+	}
+	return model;
+}
+
+struct Chunk createWaveyChunk(int baseX, int baseZ)
+{
+	//reserve space for the chunk data
+	struct Chunk chunk;
+	chunk.baseX = baseX;
+	chunk.baseZ = baseZ;
+	chunk.chunkData = malloc(CHUNK_XYZ * sizeof(u8));
+	//Take the base X,Z coordinate, so that we have the global positions.
+	//translate the global X,Z coordinate to a some height. with some height function
+	for (size_t x = 0; x < CHUNK_X; x++)
+	{
+		for (size_t z = 0; z < CHUNK_Z; z++)
+		{
+			//use a height function between 0 and 20
+			int height = (int)(2 * (sin((baseX + x) / 2) * cos((baseZ + z) / 2) + 1));
+			//now for every y in this xz collumn either make it empty or set.
+			for (size_t y = 0; y < CHUNK_Y; y++)
+			{
+				if(y <= height)
+				{
+					chunk.chunkData[z * CHUNK_XY + y * CHUNK_X + x] = 1;
+				}
+				else
+				{
+					{
+						chunk.chunkData[z * CHUNK_XY + y * CHUNK_X + x] = 0;
+					}
+				}	
+			}
+		}
+	}
+
+	//now turn this data into a model
+	chunk.terrain = createChunkModel(chunk.chunkData);
+	return chunk;
+	 
+}
+
+void renderChunk(struct Chunk chunk)
+{
+	//translate the chunk to it's base point and then render it from there
+	//will be expanded with other chunk functionality
+	GRRLIB_ObjectView(chunk.baseX, 0, chunk.baseZ, 0, 0, 0, 1, 1, 1);
+	renderModel(chunk.terrain);
+}
+
+
+
+
+
+
+
+
+//Just testing functions at this point in time
+//generate a test model
+u8 *createTestChunkID()
+{
+	u8 *chunkData = malloc(CHUNK_X * CHUNK_Y * CHUNK_Z * sizeof(u8));
+	//make a flat plane 
+	for (size_t i = 0; i < CHUNK_X * CHUNK_Y * CHUNK_Z; i++)
+	{
+		chunkData[i] = 0;
+	}
+	for (size_t x = 0; x < CHUNK_X; x++)
+	{
+		for (size_t z = 0; z < CHUNK_Z; z++)
+		{
+			chunkData[(z * CHUNK_Y * CHUNK_X) + (0 * CHUNK_X) + x] = 1;
+		}
+		
+	}
+	
+	return chunkData;
+	
 }
 
 //Create a test cube by adding one face at a time. 

@@ -26,12 +26,16 @@
 //=====================================================================================
 int main() {
     float a=0;
-    int cubeZ=0;
 
     //Using GRRLib we can initialise the wii a lot easier and quicker, for example
     //the video mode object is already premade for us in within the library.
     GRRLIB_Init();
     WPAD_Init();
+
+    //Store the x,y,z coordinates of the lplayer are stored here.
+    f32 x = 0.0f;
+    f32 y = 2.0f;
+    f32 z = 13.0f;
 
     //we could using this opertunity to load all the textures since they're so small
     //and won't be disposing of them at any point, perhaps.
@@ -44,30 +48,50 @@ int main() {
     //voxel like
     GRRLIB_Settings.antialias = false;
     GRRLIB_SetBackgroundColour(0x8C, 0xBE, 0xD6, 0xFF);
-    GRRLIB_Camera3dSettings(0.0f,0.0f,13.0f, 0,1,0, 0,0,0);
+    GRRLIB_Camera3dSettings(x, y, z, 0, 1, 0, 0, 0, 0);
 
     //make our test model for now and test it
-    struct Model testCube = makeTestCube();
+    //struct Model testCube = makeTestCube();
+    //u8 *chunkData = createTestChunkID();
+    //struct Model testChunk = createChunkModel(chunkData);
+
+
+    struct Chunk chunk00 = createWaveyChunk(0,0);
+    struct Chunk chunk10 = createWaveyChunk(16,0);
+    struct Chunk chunkm10 = createWaveyChunk(-16,0);
+    
 
     while(1) {
         GRRLIB_2dMode();
         WPAD_ScanPads();
         if(WPAD_ButtonsDown(0) & WPAD_BUTTON_HOME) exit(0);
-        if(WPAD_ButtonsHeld(0) & WPAD_BUTTON_A) cubeZ++;
-        if(WPAD_ButtonsHeld(0) & WPAD_BUTTON_B) cubeZ--;
+        if(WPAD_ButtonsHeld(0) & WPAD_BUTTON_LEFT) z--;
+        if(WPAD_ButtonsHeld(0) & WPAD_BUTTON_RIGHT) z++;
+        if(WPAD_ButtonsHeld(0) & WPAD_BUTTON_DOWN) x--;
+        if(WPAD_ButtonsHeld(0) & WPAD_BUTTON_UP) x++;
+        if(WPAD_ButtonsHeld(0) & WPAD_BUTTON_A) y++;
+        if(WPAD_ButtonsHeld(0) & WPAD_BUTTON_B) y--;
 
-        //GRRLIB_Camera3dSettings(13.0f * sin(a),0.0f,5.0f * cos(a), 0,1,0, 0,0,0);
+        //GRRLIB_Camera3dSettings(x,y,z, 0, 1, 0, 90 * cos(a / 100), 0, 90 * sin(a / 100));
+        GRRLIB_Camera3dSettings(x,y,z, 0, 1, 0, x + 1, y, z);
         GRRLIB_3dMode(0.1,1000,70,0,0);
 
-        renderTestCube(testCube, a,  2,  0,  4);
-        renderTestCube(testCube, a,  0, -8,  0);
-        renderTestCube(testCube, a,  0,  1, -4);
-        
-        a+=1.0f;
+        //renderTestCube(testCube, a,  2,  0,  4);
+        //renderTestCube(testCube, a,  0, -8,  0);
+        //renderTestCube(testCube, a,  0,  1, -4);
+        //renderTestCube(testChunk, 0,0,0,0);
+        //renderTestCube(testChunk, 0, 16, 0, 16);
+        renderChunk(chunk00);
+        renderChunk(chunk10);
+        renderChunk(chunkm10);
+
+
+        //a+=1.0f;
 
         // Switch To 2D Mode to display text
         GRRLIB_2dMode();
-        GRRLIB_Printf(0, 1, tex_font, 0x000000FF, 1, "SCUFFEDCRAFT 0.0.0");
+        //print the debug version and the x y z corrdinates
+        GRRLIB_Printf(0, 1, tex_font, 0x000000FF, 0.8, "SCUFFEDCRAFT 0.0.0 :X = %0.1f   Y = %0.1f   Z = %0.1f", x, y, z);
 
         GRRLIB_Render();
     }

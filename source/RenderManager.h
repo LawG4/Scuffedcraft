@@ -13,12 +13,14 @@
 //= Start the file with the structure definitions                                       =
 //=======================================================================================
 
-//A model is a linked list of faces, this is because a model can be exapanded during its
-//creation, for instance when we take a chunk's representation and turn it into a model
-//we add one face at a time. To this end a model is made as a linked list of faces, with
-//a texture object. A face contains a list of vertices and texture coordinates and a 
-//pointer to the next one. Then we assume for now that different types of game objects
-//will have the information to correctly translate the object 
+//A model is made up of a list of faces and a texture. a face is made up of its vertex 
+//coordinates and its texture coordinates. The method we're aiming for here is to render 
+//a model one face at a time. the local to world translation needs to be applied to the
+//model or else it won't be placed into the world properly at all. a model is a linked 
+//list instead of statically allocated, this is because when we create a model for the 
+//chunk it can expand in size.
+
+//Vertex points for the Face
 struct Face_VT
 {
 	//cordinates are listed clockwise
@@ -26,25 +28,46 @@ struct Face_VT
 	f32 y1, y2, y3, y4;
 	f32 z1, z2, z3, z4;
 };
-
+//Texture coordinates for the Face
 struct Face_TX
 {
 	f32 x1, x2, x3, x4;
 	f32 y1, y2, y3, y4;
 };
-
+//A Linked list element representing this face of the model
 struct Face{
 	struct Face_VT vt;
 	struct Face_TX tx;
 	struct Face *next;
 };
-
+//The struct representing a model, containing the starting node for the face and the size
+//and texture
 struct Model
 {
 	//Still need the size of the size of the model used for GRRLIB rendering
 	int size;
 	GRRLIB_texImg *tex;
 	struct Face *firstFace;
+};
+
+//A chunk will have (hopefully) two models, a Terain model and a water model, they're 
+//stored seperatley as they will have different rendering techniques. A model will have
+// an list of integers which represent the blocks stored within it. a chunk will also 
+//have a starting base point which will represent the bottom left corner of the chunk in
+// the XZ coordinate. that way translating from global to local coordinates is as simple
+// as subtract or add the base point.
+
+//A struct containting all the information required to render a chunk
+struct Chunk
+{
+	//Translation from local to global x coord
+	int baseX;
+	//Translation from local to global z coord
+	int baseZ;
+	//8bit int array representing the blocks in the chunk
+	u8 *chunkData;
+	//model representing the chunk.
+	struct Model terrain;
 };
 
 
@@ -64,14 +87,21 @@ extern struct Face_VT Face_Cube_S;
 extern struct Face_VT Face_Cube_E;
 extern struct Face_VT Face_Cube_W;
 
+//Constants that are used for chunk sizes.
+extern int CHUNK_X;
+extern int CHUNK_Y;
+extern int CHUNK_Z;
+//size of XY cuz it get calculated an awful lot
+extern int CHUNK_XY; 
+//Size of entire chunk cuz following same previous naming convention
+extern int CHUNK_XYZ;
 
 
 //=======================================================================================
-//= Function declarations from RenderManager.c                                          =
+//= Render                                                                              =
 //=======================================================================================
-
-//We'll start with this section which begins with the model and faces utility such as 
-//a "constructor" for faces. 
+//Render introduction
+//
 
 //This face generater is used to copy the prebuild cube face verticies and then place 
 //them in a relative position, this will be used primaraily in generating the chunk.
@@ -92,7 +122,35 @@ void dealocateModel(struct Model *model);
 //for now this section is primarily going to be support functions as well as some 
 //test functions. 
 void renderModel(struct Model model );
+
+//=======================================================================================
+//= Chunks                                                                              =
+//=======================================================================================
+//Chunk Introduction
+//Here's how a chunk works, you have a list of unsigned integers, it is a one dimensional
+// array which has it's structure implied using the chunk size variables. specifically 
+//it goes [z][y][x]. This list of integers represents the chunk data, an entry at x,y,z 
+//is the block ID at that coordinate, the x,y,z coordinate are loccal to the chunk data. 
+//To translate this globally the chunk has a translation point, which refers to the global 
+//point at the bottom top left. ie the chunk with translation point 0,0,0 will be the 
+//chunk to the bottom right of the origin.
+
+//Chunk functions
+
+//Take an integer list representing chunk data and transform it into a locally positioned model STILL TO BE OPTIMISED
+struct Model createChunkModel(u8 *chunkData);
+//Create a simple tester chunk that ins't flat and takes the chunk base location of the chunk into account.
+//Remove when we have a working noise generator function.
+struct Chunk createWaveyChunk(int baseX, int baseY);
+//Renders the chunk, added here instead of the regular render model because it'll be expanded
+void renderChunk(struct Chunk chunk);
+//Generate a flat chunk ID list, not a chunk in whole just the block data
+u8 *createTestChunkID();
+
+
+
+
 //make the model
 struct Model makeTestCube();
-//render the model
+//render the model to be replaced with a couple different types of render function.
 void renderTestCube(struct Model model, f32 param, f32 x, f32 y, f32 z);
