@@ -4,8 +4,7 @@
 Scuffedcraft.dol
 #Shortcut to the tools folder
 *.lnk
-#Vscode directory
-.vscode/*
+
 #ignore my terrible scribly notes
 Notes/*
 

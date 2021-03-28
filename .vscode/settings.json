@@ -1,0 +1,13 @@
+{
+    "files.associations": {
+        "grrlib.h": "c",
+        "stdlib.h": "c",
+        "chunk.h": "c",
+        "block.h": "c",
+        "mesh.h": "c",
+        "stdio.h": "c",
+        "fat.h": "c",
+        "libfatversion.h": "c",
+        "disc_io.h": "c"
+    }
+}
