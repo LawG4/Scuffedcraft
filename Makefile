@@ -17,9 +17,9 @@ include $(DEVKITPPC)/wii_rules
 #---------------------------------------------------------------------------------
 TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
-SOURCES		:=	source source/gfx
+SOURCES		:=	source source/Chunks source/Entities source/gfx source/Physics source/Render source/Logs 
 DATA		:=	data
-INCLUDES	:=
+INCLUDES	:=	source source/Chunks source/Entities source/Physics source/Render source/Logs
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -96,6 +96,11 @@ export OUTPUT	:=	$(CURDIR)/$(TARGET)
 .PHONY: $(BUILD) clean
 
 #---------------------------------------------------------------------------------
+#Some variables and functions for cross platform building
+#---------------------------------------------------------------------------------
+#TODO: do this, cant test it since I don't have a linux machine yet.
+
+#---------------------------------------------------------------------------------
 $(BUILD):
 	@[ -d $@ ] || mkdir -p $@
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
@@ -107,8 +112,27 @@ clean:
 
 #---------------------------------------------------------------------------------
 run:
-	wiiload $(TARGET).dol
+	@echo Launching on Dolphin
+	"${DOLPHIN_PATH}\Dolphin.exe" -b $(OUTPUT).elf
 
+#---------------------------------------------------------------------------------
+log:
+	@echo Launching Dolphin and taking Logs
+	@"${DOLPHIN_PATH}\Dolphin.exe" -b $(OUTPUT).elf > /dev/null
+# after this recieve the log file from the emulated SD Card using imdisk
+	@imdisk -a -t vm -f "${USERPROFILE}\Documents\Dolphin Emulator\Wii\SD.raw" -m W: > /dev/null
+	@cat /w/Log.txt
+	@imdisk -D -m W: > /dev/null
+
+#Sometimes if theres an error the program won't unmount the disk 
+mount:
+	@imdisk -a -t vm -f "${USERPROFILE}\Documents\Dolphin Emulator\Wii\SD.raw" -m W: > /dev/null
+unmount: 
+	@imdisk -D -m W: > /dev/null
+#---------------------------------------------------------------------------------
+hw:
+	@echo Launching on Wii at IP
+	wiiload $(TARGET).dol
 
 #---------------------------------------------------------------------------------
 else
