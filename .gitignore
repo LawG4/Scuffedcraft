@@ -8,6 +8,11 @@ Scuffedcraft.dol
 #ignore my terrible scribly notes
 Notes/*
 
+#The build directories
+build-MSYS2/*
+build-Windows/*
+build-WSL/*
+build-Linux/*
 
 # Prerequisites
 *.d

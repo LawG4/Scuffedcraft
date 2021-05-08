@@ -4,9 +4,9 @@
             "name": "Wii",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${DEVKIT_PATH}/devkitPPC/powerpc-eabi/include/*",
-                "${DEVKIT_PATH}/libogc/include/*",
-                "${DEVKIT_PATH}/GRRLIB/GRRLIB/GRRLIB/*"
+                "${WIN_DEVKITPRO}/devkitPPC/powerpc-eabi/include/*",
+                "${WIN_DEVKITPRO}/libogc/include/*",
+                "${WIN_DEVKITPRO}/GRRLIB/GRRLIB/GRRLIB/*"
             ],
             "defines": [
                 "GEKKO",
@@ -14,7 +14,7 @@
                 "UNICODE",
                 "_UNICODE"
             ],
-            "compilerPath": "${DEVKIT_PATH}/devkitPPC/bin/powerpc-eabi-gcc",
+            "compilerPath": "${WIN_DEVKITPRO}/devkitPPC/bin/powerpc-eabi-gcc",
             "cStandard": "c99",
             "cppStandard": "c++14",
             "intelliSenseMode": "linux-gcc-x86"

@@ -16,6 +16,7 @@
  */
 #include "Chunk.h"
 #include <math.h>
+#include <stdio.h>
 #include "../Render/block.h"
 #include "../Logs/Log.h"
 
