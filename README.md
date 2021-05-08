@@ -3,7 +3,9 @@ Ever wanted to play a Minecraft clone on the Nintendo Wii? Well here is a scuffe
 
 ScuffedCraft is a totally open source voxel game written in C, minor updates are tested primarily via Dolphin, although releases are tested on a homebrewed Nintendo Wii. *note, this project is not affiliated with Nintendo.*
 
-<blockquote class="twitter-tweet"><p lang="en" dir="ltr">In other news, scuffedcraft runs on real hardware!! In an incredibly on-brand move, I only have the teeniest little screen salvaged from a car reversing camera kit <a href="https://t.co/2i5kFReEw7">pic.twitter.com/2i5kFReEw7</a></p>&mdash; Lawrence (@Lawrence9800) <a href="https://twitter.com/Lawrence9800/status/1389253026389663745?ref_src=twsrc%5Etfw">May 3, 2021</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+![ScuffedCraft Works](https://media.giphy.com/media/RcW9HlcwmSmcjsIqlR/giphy.gif)
+
+> ***IT WORKS ON REAL HARDWARE***
 
 ### Gameplay features
 
