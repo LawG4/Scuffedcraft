@@ -16,28 +16,17 @@ ScuffedCraft is a totally open source voxel game written in C, minor updates are
 
 ### Build instructions and environment
 
-*`*I am slowly begging the move to CMake to simplify this process. The main problem is the devkitPro install on windows sets it's environment variables to be local to the UNIX file system within MSYS2. As a result make works, but the devkit environment variables can't be used for include paths. So for windows users set WIN_DEVKITPRO environment variable. The Linux make file has problems reaching dolphin, this is another problem I want to be able to fix at some point. Hopefully the move to CMake will facilitate this.*`*
+Instructions have been moved to this file: [build-instructions.md](./documentation/build-instructions.md)
 
-So the general layout of the project follows my general code structures for Nintendo Wii development. There is a .vsvode folder because I use VSCode for writing my projects. This has some settings for include directories, intellisense and compilers. My VSCode settings and makefile **REQUIRE** some environment variables to be set on Windows. On Linux Autocomplete will work fine, but dolphin won't be launched.
+I have decided to not support Windows for this project anymore. This is because there is too many problems coordinating the build system and tools to work identically across Windows and Unix. Also porting the build system from make to Cmake was too much of a pain, the easiest and most versatile build system I can make, would be to fire bash scripts from the make file.
 
-```makefile
-DOLPHIN_PATH  = The root folder where dolphin is installed to 
-WIN_DEVKITPRO = The root folder where Devkit is installed to  
-```
-
-The *WIN_DEVKITPRO* environment variable is a duplicate of the one that is installed via devkit, however that one on Windows points to the MySys2 file path not the windows file path. So in order to use the devkit in windows via command line we need the duplicate variable.
-
-- make 	   : Build the .dol and .elf files
-- make run : Build and run the .elf file on dolphin emulator
-- make log : Build and run on dolphin but then fetch the log files afterwards
-- make hw  : Build the .dol and .elf file and launch the dol via wii_load to the wii with ip : WIILOAD env variable
+Have no fear Windows users *(I am one of you)* The build system works perfectly well from WSL and I plan to supply notes for that in the future
 
 ### Dependencies 
 
 - DevkitPPC
 - LibOGC
-- GRRLib
-- ImDisk (Only for windows for reading the virtual SD Card to get the debug logs)
+- GRRLib (I want to remove this in the future)
 - Dolphin for testing
 
 ### Development Goals
@@ -45,7 +34,6 @@ The *WIN_DEVKITPRO* environment variable is a duplicate of the one that is insta
 Do you want to help contribute to the code base? Here's a list of features I'm planning to add, and it'd be lovely if you'd like to help! Also feel free to go absolutely wild and implement whatever you want! 
 
 - Switch mesh from a linked list of faces to automatically reallocated array of faces
-- Make the makefile cross platform as it currently is only built for Windows
 - Test the Wii to see if there is a benefit to using quad primitives instead of triangular 
 - Storing and loading world files
 - Seeds that dictate how a terrain is created
@@ -60,7 +48,7 @@ Do you want to help contribute to the code base? Here's a list of features I'm p
 
 #### **0.0.2** *in progress*
 
-- Started moving to CMake
+- Supplying bash scripts to init the repo
 
 #### **0.0.1**
 
