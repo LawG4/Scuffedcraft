@@ -1,18 +1,23 @@
-#The actual dolphin build
+# The actual dolphin build
 *.dol
 *.DOL
 Scuffedcraft.dol
-#Shortcut to the tools folder
+
+# Shortcut to the tools folder
 *.lnk
 
-#ignore my terrible scribly notes
+# ignore my terrible scribly notes
 Notes/*
 
-#The build directories
+# The build directories
 build-MSYS2/*
 build-Windows/*
 build-WSL/*
 build-Linux/*
+
+# The texture atlas bitmap
+*.bmp
+
 
 # Prerequisites
 *.d
