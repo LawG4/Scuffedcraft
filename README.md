@@ -49,6 +49,7 @@ Do you want to help contribute to the code base? Here's a list of features I'm p
 #### **0.0.2** *in progress*
 
 - Supplying bash scripts to init the repo
+- Automatically generate a texture atlas for the standard blocks
 
 #### **0.0.1**
 
