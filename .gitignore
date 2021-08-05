@@ -12,6 +12,9 @@ Notes/*
 # Ignore pycache created by assets build script
 __pycache__
 
+# All files in the Assets folder are auto generated
+source/Assets
+
 # The build directories
 build-MSYS2/*
 build-Windows/*
