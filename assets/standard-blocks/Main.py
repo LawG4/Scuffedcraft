@@ -6,8 +6,6 @@ import os
 # Python packages you'll need to add
 from PIL import Image #Requires pip install Pillow
 
-# Local python files
-from Indices import generateIndicesFiles
 
 # This python script turns the json file of standard blocks, and turns them into asset files that we can use in the engine.
 # 
@@ -193,6 +191,8 @@ def writeIndices(FaceName, textureName):
 	SourceFile.write("\t\t\t{" +  str(indices[0][0]) + ", " +  str(indices[0][1]) + ", " +  str(indices[1][0]) + ", " +  str(indices[1][1]) + ", " +
 		  str(indices[2][0]) + ", " +  str(indices[2][1]) + ", " +  str(indices[3][0]) + ", " +  str(indices[3][1]) + " },")
 
+
+print("Writing texture indices")
 SourceFile.write("const sc_standard_block_indices standardBlocksByID[" + str(blockCount) + "] = \n\t{")
 
 # For each block go through each face and write out the indices
@@ -213,3 +213,4 @@ for block in blockData['standard-blocks']:
 #Get rid of the last comma and then close the array
 SourceFile.seek(SourceFile.tell() -1, os.SEEK_SET)
 SourceFile.write("\n\t};")
+print("Done!")
