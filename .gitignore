@@ -9,6 +9,9 @@ Scuffedcraft.dol
 # ignore my terrible scribly notes
 Notes/*
 
+# Ignore pycache created by assets build script
+__pycache__
+
 # The build directories
 build-MSYS2/*
 build-Windows/*
