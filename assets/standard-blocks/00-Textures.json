@@ -4,32 +4,32 @@
 		{
 			"block-id":1,
 			"block-name":"grass-block",
-			"block-texture-n":"01-grass-side.png",
-			"block-texture-e":"01-grass-side.png",
-			"block-texture-s":"01-grass-side.png",
-			"block-texture-w":"01-grass-side.png",
-			"block-texture-t":"01-grass-top.png",
-			"block-texture-b":"01-grass-bottom.png"
+			"block-texture-n":"01_grass_side.png",
+			"block-texture-e":"01_grass_side.png",
+			"block-texture-s":"01_grass_side.png",
+			"block-texture-w":"01_grass_side.png",
+			"block-texture-t":"01_grass_top.png",
+			"block-texture-b":"01_grass_bottom.png"
 		},
 		{
 			"block-id":2,
 			"block-name":"dirt-block",
-			"block-texture-n":"01-grass-bottom.png",
-			"block-texture-e":"01-grass-bottom.png",
-			"block-texture-s":"01-grass-bottom.png",
-			"block-texture-w":"01-grass-bottom.png",
-			"block-texture-t":"01-grass-bottom.png",
-			"block-texture-b":"01-grass-bottom.png"
+			"block-texture-n":"01_grass_bottom.png",
+			"block-texture-e":"01_grass_bottom.png",
+			"block-texture-s":"01_grass_bottom.png",
+			"block-texture-w":"01_grass_bottom.png",
+			"block-texture-t":"01_grass_bottom.png",
+			"block-texture-b":"01_grass_bottom.png"
 		},
 		{
 			"block-id":3,
 			"block-name":"stone-block",
-			"block-texture-n":"03-stone.png",
-			"block-texture-e":"03-stone.png",
-			"block-texture-s":"03-stone.png",
-			"block-texture-w":"03-stone.png",
-			"block-texture-t":"03-stone.png",
-			"block-texture-b":"03-stone.png"
+			"block-texture-n":"03_stone.png",
+			"block-texture-e":"03_stone.png",
+			"block-texture-s":"03_stone.png",
+			"block-texture-w":"03_stone.png",
+			"block-texture-t":"03_stone.png",
+			"block-texture-b":"03_stone.png"
 		}
 	]
 }
