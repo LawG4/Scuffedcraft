@@ -180,7 +180,7 @@ for textureName in uniqueTextureNames:
 		y = y + faceSizeInPixels + texturePad
 
 print("Saving output image")
-atlasImage.save('out.bmp')
+atlasImage.save('StandardBlocksTextureAtlas.bmp')
 
 #
 # Finish writing to the source file by taking each of the blocks and writing the indices out
