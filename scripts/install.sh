@@ -50,7 +50,7 @@ echo -e "DEVKITPRO = ${TERM_YLW}${DEVKITPRO}${TERM_NOC}"
 echo -e "DEVKITARM = ${TERM_YLW}${DEVKITARM}${TERM_NOC}"
 echo -e "DEVKITPPC = ${TERM_YLW}${DEVKITPPC}${TERM_NOC}\n"
 
-echo -e "DEVKITPRO=${DEVKITPRO}\nDEVKITARM=${DEVKITARM}\nDEVKITPPC=${DEVKITPPC}" > ${LOCAL}sc_env.sh
+echo -e "export DEVKITPRO=${DEVKITPRO}\nexport DEVKITARM=${DEVKITARM}\nexport DEVKITPPC=${DEVKITPPC}" > ${LOCAL}sc_env.sh
 echo -e "export PATH=\"${DEVKITPRO}:${DEVKITARM}:${DEVKITPPC}:\$PATH\"" >> ${LOCAL}sc_env.sh
 echo -e "export PATH=\${DEVKITPRO}/tools/bin:\$PATH" >> ${LOCAL}sc_env.sh
 source ${LOCAL}sc_env.sh
@@ -346,6 +346,23 @@ if [ $? -eq 0 ]; then
 else
   echo -e "${TERM_RED}Fail!${TERM_NOC}"
   exit
+fi
+
+# Ensure that the user has make
+echo -e -n "* Checking for make : "
+if ! type "make" &> /dev/null; then
+	echo -e "${TERM_YLW}Not Found!${TERM_NOC}"
+	echo -e -n "\tInstalling make : "
+	${PKG_INS} ${PKG_ARG} "make" &> /dev/null 
+	# one final check 
+	if ! type "make" &> /dev/null; then
+		echo -e "${TERM_RED}\n\tFailed to install make${TERM_NOC}"
+		exit
+	else
+		echo -e "${TERM_GRN}Success!${TERM_NOC}"
+	fi
+else
+	echo -e "${TERM_GRN}Found!${TERM_NOC}"
 fi
 
 #==================================================================================================
