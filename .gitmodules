@@ -1,0 +1,3 @@
+[submodule "external/GRRLIB"]
+	path = external/GRRLIB
+	url = https://github.com/GRRLIB/GRRLIB.git
