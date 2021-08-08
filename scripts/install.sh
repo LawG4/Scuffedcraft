@@ -136,20 +136,33 @@ fi
 # PAC_CMD to define the pacman command
 #==================================================================================================
 
+# Ensure that the user has wget
+echo -e -n "* Checking for wget : "
+if ! type "wget" &> /dev/null; then
+	echo -e "${TERM_YLW}Not Found!${TERM_NOC}"
+	echo -e -n "\tInstalling wget : "
+	${PKG_INS} ${PKG_ARG} "wget" &> /dev/null 
+	# one final check 
+	if ! type "wget" &> /dev/null; then
+		echo -e "${TERM_RED}\n\tFailed to install wget${TERM_NOC}"
+		exit
+	else
+		echo -e "${TERM_GRN}Success!${TERM_NOC}"
+	fi
+else
+	echo -e "${TERM_GRN}Found!${TERM_NOC}"
+fi
+
 #==================================================================================================
 # Install dkp-pacman on systems that need it
 #==================================================================================================
 if [[ "${SC_HOST_SYSTEM}" == "Debian" ]] || [[ "${SC_HOST_SYSTEM}" == "OSX" ]]; then
 	# If we don't have dkp-pacman we're gonna have to install that from the github
 	echo -n "* Detecting dkp-pacman : "
-	if type "dkp-pacman" > /dev/null; then
+	if type "dkp-pacman" &> /dev/null; then
 		echo -e "${TERM_GRN}Found!${TERM_NOC}"
 	else
 		echo -e "${TERM_YLW}Not Found!${TERM_NOC}"
-		# To install dkp-pacman we're gonna need Curl to pull the binaries.
-		if ! type "wget" > /dev/null; then
-			"${PKG_INS} wget"
-		fi
 
 		# Set the name for the correct binary to pull
 		if [[ "${SC_HOST_SYSTEM}" == "OSX" ]]; then
@@ -226,23 +239,6 @@ else
 		exit
 	else 
 		PAC_CMD="pacman"
-	fi
-
-	# Install wget
-	echo -e -n "* Checking for wget : "
-	if ! type "wget" > /dev/null; then
-		echo -e "${TERM_YLW}Not Found!${TERM_NOC}"
-		echo -e "\tInstalling wget : "
-		\"yes | pacman -S "wget"\" > /dev/null 
-		# one final check 
-		if ! type "wget" > /dev/null; then
-			echo -e "${TERM_RED}\n\tFailed to install wget${TERM_NOC}"
-			exit
-		else
-			echo -e "${TERM_GRN}Success!${TERM_NOC}"
-		fi
-	else
-		echo -e "${TERM_GRN}Found!${TERM_NOC}"
 	fi
 
 	# Download the pacman keys
