@@ -7,27 +7,28 @@ ScuffedCraft is a totally open source voxel game written in C, minor updates are
 
 > ***IT WORKS ON REAL HARDWARE***
 
+### Build instructions
+
+```shell
+# Pull the repo
+git clone https://github.com/LawG4/Scuffedcraft.git
+cd Scuffedcraft
+# Install and build all dependencies
+sudo -E bash scripts/init-repo.sh
+# Build ScuffedCraft
+bash scripts/build.sh
+# Run ScuffedCraft on Dolphin. On WSL make sure to edit scripts/sc_env.sh first
+bash scripts/run.sh
+```
+
+If you want to install everything yourself, or you're using an unsupported platform, I am working on detailed manual instructions.
+
 ### Gameplay features
 
 - Big plane loaded in, that you can fly around.
 - Infinitely loads flat terrain
 - Works on real hardware!!!! 
 - That is it at the moment.
-
-### Build instructions and environment
-
-Instructions have been moved to this file: [build-instructions.md](./documentation/build-instructions.md)
-
-I have decided to not support Windows for this project anymore. This is because there is too many problems coordinating the build system and tools to work identically across Windows and Unix. Also porting the build system from make to Cmake was too much of a pain, the easiest and most versatile build system I can make, would be to fire bash scripts from the make file.
-
-Have no fear Windows users *(I am one of you)* The build system works perfectly well from WSL and I plan to supply notes for that in the future
-
-### Dependencies 
-
-- DevkitPPC
-- LibOGC
-- GRRLib (I want to remove this in the future)
-- Dolphin for testing
 
 ### Development Goals
 
