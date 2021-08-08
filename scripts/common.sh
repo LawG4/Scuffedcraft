@@ -1,6 +1,8 @@
 #!/bin/bash
-source configure.sh
 
+LOCAL=$(dirname "$0")"/"
+source ${LOCAL}sc_env.sh
+echo -e "${SC_DOLPHIN_CMD}"
 # Colour terminal codes
 TERM_BLK='\033[0;30m'
 TERM_RED='\033[0;31m'

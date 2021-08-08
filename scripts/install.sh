@@ -358,8 +358,8 @@ if [[ $(grep microsoft /proc/version) ]] || [[ $(grep Microsoft /proc/version) ]
 	echo -e "\tInstall dolphin on windows and edit the auto generated file at scripts/sc_env.sh"
 	echo -e "\tSC_DOLPHIN_CMD=/mnt/c/<PATH TO DOLPHIN>"
 	echo -e "\tExcept replace <Path To Dolphin> to be the path to dolphin executable"
-	echo -e "\te.g. SC_DOLPHIN_CMD=/mnt/c/Program Files/Dolphin/dolphin.exe"
-	echo -e "SC_DOLPHIN_CMD=/mnt/c/<PATH TO DOLPHIN>" >> ${LOCAL}sc_env.sh
+	echo -e "\te.g. SC_DOLPHIN_CMD=\"/mnt/c/Program Files/Dolphin/dolphin.exe\""
+	echo -e "SC_DOLPHIN_CMD=\"/mnt/c/<PATH_TO_DOLPHIN>\"" >> ${LOCAL}sc_env.sh
 else
 	# On debian, we need to add the PPA
 	if [[ "${SC_HOST_SYSTEM}" == "Debian" ]]; then
