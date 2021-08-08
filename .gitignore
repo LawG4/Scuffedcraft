@@ -26,6 +26,7 @@ source/Assets
 ############
 
 # The build directories
+build/*
 build-MSYS2/*
 build-Windows/*
 build-WSL/*
