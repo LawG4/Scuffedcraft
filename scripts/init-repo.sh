@@ -31,3 +31,7 @@ else
  exit
 fi
 cd - &> /dev/null
+
+# Create CMakeConfig
+CMAKE_DIR="${REPO_ROOT}cmake/"
+echo -e "set(DEVKITPRO ${DEVKITPRO}) \nset(DEVKITARM ${DEVKITARM}) \nset(DEVKITPPC ${DEVKITPPC}) \nset(SC_DOLPHIN_CMD) ${SC_DOLPHIN_CMD})" > ${CMAKE_DIR}sc_env.cmake

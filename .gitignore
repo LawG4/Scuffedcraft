@@ -7,6 +7,7 @@ Scuffedcraft.dol
 # Scripts and config
 ############
 scripts/sc_env.sh
+cmake/sc_env.cmake
 *.pkg.tar.xz
 *.deb
 ############
