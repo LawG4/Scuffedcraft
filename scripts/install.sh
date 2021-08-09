@@ -158,6 +158,7 @@ fi
 #==================================================================================================
 if [[ "${SC_HOST_SYSTEM}" == "Debian" ]] || [[ "${SC_HOST_SYSTEM}" == "OSX" ]]; then
 	# If we don't have dkp-pacman we're gonna have to install that from the github
+	PAC_CMD="dkp-pacman"
 	echo -n "* Detecting dkp-pacman : "
 	if type "dkp-pacman" &> /dev/null; then
 		echo -e "${TERM_GRN}Found!${TERM_NOC}"
