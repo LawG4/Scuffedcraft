@@ -1,5 +1,5 @@
 # Set the project and include the toolchain
-
+set(CMAKE_VERBOSE_MAKEFILE ON)
 cmake_minimum_required(VERSION 3.2)
 include("${CMAKE_CURRENT_LIST_DIR}/cmake/ppcToolchain.cmake")
 project(ScuffedCraft LANGUAGES C)
@@ -19,9 +19,3 @@ message("CMAKE_OBJCOPY      : ${CMAKE_OBJCOPY}")
 message("CMAKE_RANLIB       : ${CMAKE_RANLIB}")  
 message("CMAKE_SIZE         : ${CMAKE_SIZE}")  
 message("CMAKE_STRIP        : ${CMAKE_STRIP}")  
-
-
-
-
-
-

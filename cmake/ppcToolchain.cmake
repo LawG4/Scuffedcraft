@@ -20,12 +20,9 @@ endif()
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
 
 # Tell CMake we're crosscompiling
-set(CMAKE_SYSTEM_NAME "Wii")
+set(CMAKE_SYSTEM_NAME "Generic")
 set(CMAKE_SYSTEM_PROCESSOR "powerpc-eabi")
 set(CMAKE_LIBRARY_ARCHITECTURE powerpc-eabi CACHE INTERNAL "abi")
-set(CMAKE_CROSSCOMPILING 1)
-set(CMAKE_GENERATOR_TOOLSET "")
-
 
 
 # Set the prefix to the build tools
@@ -49,23 +46,12 @@ set(CMAKE_C_FLAGS "-g -O2 -Wall -DGEKKO -mrvl -mcpu=750 -meabi -mhard-float")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -I${DEVKITPRO}/portlibs/wii/include -I${DEVKITPRO}/portlibs/ppc/include -I${DEVKITPRO}libogc/include")
 #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -I/opt/devkitpro/portlibs/wii/include -I/opt/devkitpro/portlibs/ppc/include -I/opt/devkitpro/libogc/include")
 # Clear the other compiler flags to prevent the defaults being set up
-set(CMAKE_CXX_FLAGS             "")
-set(CMAKE_C_FLAGS_DEBUG         "")
-set(CMAKE_C_FLAGS_RELEASE       "")
-set(CMAKE_CXX_FLAGS_DEBUG       "")
-set(CMAKE_CXX_FLAGS_RELEASE     "")
-set(CMAKE_EXE_LINKER_FLAGS      "")
-
-set(CMAKE_EXE_LINKER_FLAGS_DEBUG "")
-set(CMAKE_EXE_LINKER_FLAGS_RELEASE "")
-set(CMAKE_EXE_LINKER_FLAGS_MINSIZEREL "")
-set(CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO "")
+add_link_options("g -DGEKKO -mrvl -mcpu=750 -meabi -mhard-float")
 
 # Make Cmake's compiler tests less rigurous
 set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
 set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
-set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 set(BUILD_SHARED_LIBS OFF CACHE INTERNAL "Shared libs not available" )
 
