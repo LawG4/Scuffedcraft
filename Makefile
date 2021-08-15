@@ -1,22 +1,16 @@
-# Define all of the initial targets, and ensure that the user has the right environment set up
-
 # First ensure that the user has correctly created a sc_env.mk file by running the init-repo script
-$(info Checking for ScuffedCraft environment configuration file)
 ifeq (,$(wildcard ./build/sc_env.mk))
 $(error Could not find environment configuration file, ensure one exists in build/sc_env.mk)
 else
-$(info Found!)
 endif
 
-# The user has an environment config, so souce it for its variables
+# The user has an environment config, so souce it for it's variables
 include build/sc_env.mk
 
 # Check that the user has the compiler 
-$(info Using DevkitPro path : $(DEVKITPRO))
 ifeq (, $(wildcard $(DEVKITPPC)/bin/powerpc-eabi-gcc))
 $(error Could not find compiler at the right path. Check build/sc_env.mk)
 else
-$(info Compiler path : $(DEVKITPPC)/bin/powerpc-eabi-gcc)
 CC = $(DEVKITPPC)/bin/powerpc-eabi-gcc
 endif
 
@@ -33,8 +27,7 @@ include source/make.mk
 # The scuffedcraft.elf target is dependent on all the object files. 
 # it is the binary after all the code has been compiled and linked into one file 
 # The list of source files are described in source/make.mk 
-ScuffedCraft.elf: $(DEP_FILES) $(CFILES) FORCE
-	@echo -e "\e[1m\e[32mBuilding ScuffedCraft ...\e[39m\e[0m" # Green and bold
+ScuffedCraft.elf: inform $(DEP_FILES) $(CFILES) FORCE
 	@echo "Temp" > ScuffedCraft.elf
 	@echo "All targets : $^"
 
@@ -42,4 +35,20 @@ ScuffedCraft.elf: $(DEP_FILES) $(CFILES) FORCE
 # For debug purposes
 FORCE: ;
 
+# A target to remove all the dependencies 
+.PHONY: clean
+clean:
+	@echo "Cleaning intermediates"
+	@rm -f $(BUILD_DIR)/*.d
+	@rm -f $(BUILD_DIR)/*.o 
+	@echo "Cleaning Binaries"
+	@rm -f ScuffedCraft.elf
+	@rm -f ScuffedCraft.dol
+	@echo "Done"
 
+# A phony target that informs the user of the variables and environments used
+.PHONY: inform
+inform:
+	@echo -e "\e[1m\e[32mBuilding ScuffedCraft ...\e[39m\e[0m" # Green and bold
+	@echo "Using DevkitPro path : $(DEVKITPRO)"
+	@echo -e "Compiler path : $(DEVKITPPC)/bin/powerpc-eabi-gcc\n"
