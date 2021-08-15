@@ -12,6 +12,7 @@ ifeq (, $(wildcard $(DEVKITPPC)/bin/powerpc-eabi-gcc))
 $(error Could not find compiler at the right path. Check build/sc_env.mk)
 else
 CC = $(DEVKITPPC)/bin/powerpc-eabi-gcc
+LD = $(CC)
 endif
 
 # Define the default target which is to build the Scuffedcraft release, which depends on the Scuffedcraft.elf
@@ -27,9 +28,10 @@ include source/make.mk
 # The scuffedcraft.elf target is dependent on all the object files. 
 # it is the binary after all the code has been compiled and linked into one file 
 # The list of source files are described in source/make.mk 
-ScuffedCraft.elf: inform $(OBJ_FILES) $(DEP_FILES) $(CFILES) FORCE
-	@echo "Temp" > ScuffedCraft.elf
-	@echo "All targets : $^"
+ScuffedCraft.elf: inform $(OBJ_FILES) $(CFILES) FORCE
+	@echo "Linking ..."
+	@$(CC) $(OBJ_FILES) $(CFLAGS) $(LINK_DIRS) $(LINK_FLAGS) -o ScuffedCraft.elf
+	
 
 # A force target, which just always runs so that ScuffeCraft.elf always runs
 # For debug purposes
@@ -41,6 +43,8 @@ clean:
 	@echo "Cleaning intermediates"
 	@rm -f $(BUILD_DIR)/*.d
 	@rm -f $(BUILD_DIR)/*.o 
+	@rm -f *.d
+	@rm -f *.o 
 	@echo "Cleaning Binaries"
 	@rm -f ScuffedCraft.elf
 	@rm -f ScuffedCraft.dol
