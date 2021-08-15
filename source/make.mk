@@ -37,8 +37,9 @@ CFLAGS=-g -O2 -Wall -Wextra -DGEKKO -mrvl -mcpu=750 -meabi -mhard-float
 # Create one object file for each source file and the auto generated make dependencies
 # $< = name of dependency : $@ = name of target
 $(BUILD_DIR)/%.o: %.c
-	@$(CC) $(CFLAGS) $(INCLUDE_DIRS) -c $< -o $@
 	@echo -e "\t $<"
+	@$(CC) $(CFLAGS) $(INCLUDE_DIRS) -c $< -o $@
+	
 
 # Define the build rule that generates the .d file for each .c file
 # the .d file automatically tracks the dependencies of each .c file
