@@ -27,7 +27,7 @@ include source/make.mk
 # The scuffedcraft.elf target is dependent on all the object files. 
 # it is the binary after all the code has been compiled and linked into one file 
 # The list of source files are described in source/make.mk 
-ScuffedCraft.elf: inform $(DEP_FILES) $(CFILES) FORCE
+ScuffedCraft.elf: inform $(OBJ_FILES) $(DEP_FILES) $(CFILES) FORCE
 	@echo "Temp" > ScuffedCraft.elf
 	@echo "All targets : $^"
 
