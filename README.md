@@ -13,13 +13,20 @@ ScuffedCraft is a totally open source voxel game written in C, minor updates are
 # Pull the repo
 git clone https://github.com/LawG4/Scuffedcraft.git
 cd Scuffedcraft
+
 # Install and build all dependencies
+# For Linix and mac:
 sudo -E bash scripts/init-repo.sh
+# For Windows:
+bash scripts/init-repo.sh
+
 # Build ScuffedCraft
-bash scripts/build.sh
+make
+
 # Run ScuffedCraft on Dolphin. On WSL make sure to edit scripts/sc_env.sh first
 bash scripts/run.sh
 ```
+For ***Windows*** and most likely Mac, I cannot automatically install the dependencies. This is because Windows doesn't have a package manager, Mac has homebrew and it might work if you're lucky. Luckily on Windows there's a graphical installer, so you'll be okay. That's why we don't need sudo on windows, since we're not installing anything for you, there's also the fact that msys2 doesn't have sudo...
 
 If you want to install everything yourself, or you're using an unsupported platform, I am working on detailed manual instructions.
 
@@ -48,7 +55,7 @@ Do you want to help contribute to the code base? Here's a list of features I'm p
 ### Patch notes
 
 #### **0.0.2** *in progress*
-
+- Restructure the makefile, firstly to make it easier to understand. Secondly so I can understand the build process better as I was relying on a Grrlib template.
 - Supplying bash scripts to init the repo
 - Automatically generate a texture atlas for the standard blocks
 
