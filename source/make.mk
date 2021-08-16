@@ -108,14 +108,12 @@ $(BUILD_DIR)/%.o: %.c
 $(BUILD_DIR)/%.d: %.c
 # Build the dependencies files (MMD MP buid deps) (MF output file) (c compile without linking)
 	@$(CC) -MMD -MP -MF $@ $(INCLUDE_DIRS) -c $< -o build/intermediate.o
-	
-	
+		
 # The dependencies files generated are just plain text that list them like a makefile
 # so we can just include them
 include $(DEP_FILES)
 
 # Make a phony target that informs the user that compilation has started 
-
 .PHONY: compile_informer
 compile_informer:
 	@echo "Compiling object files ..."

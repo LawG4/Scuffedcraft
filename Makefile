@@ -15,10 +15,16 @@ CC = $(DEVKITPPC)/bin/powerpc-eabi-gcc
 LD = $(CC)
 endif
 
+
+#
+# Start defining targets to build, the first being scuffedcraft.dol
+#
+
 # Define the default target which is to build the Scuffedcraft release, which depends on the Scuffedcraft.elf
 ScuffedCraft.dol: ScuffedCraft.elf
 	@echo -e "\e[1m\e[32mCompiling release configuration\e[39m\e[0m" # Green and bold
-	@echo $(SC_DOLPHIN_CMD)
+	@$(DEVKITPRO)/tools/bin/elf2dol $< $@
+	@echo "Done!"
 
 # Include the file that defines all of the source files used, or at least all the ones I want to add
 # I don't want to use globbing, so that I can have explicit control
@@ -32,19 +38,12 @@ ScuffedCraft.elf: inform $(OBJ_FILES) $(CFILES) FORCE
 	@echo "Linking ..."
 	@$(CC) $(OBJ_FILES) $(CFLAGS) $(LINK_DIRS) $(LINK_FLAGS) -o ScuffedCraft.elf
 	
-
-# A force target, which just always runs so that ScuffeCraft.elf always runs
-# For debug purposes
-FORCE: ;
-
-# A target to remove all the dependencies 
+# A target to remove all the builds made  
 .PHONY: clean
 clean:
 	@echo "Cleaning intermediates"
 	@rm -f $(BUILD_DIR)/*.d
 	@rm -f $(BUILD_DIR)/*.o 
-	@rm -f *.d
-	@rm -f *.o 
 	@echo "Cleaning Binaries"
 	@rm -f ScuffedCraft.elf
 	@rm -f ScuffedCraft.dol
