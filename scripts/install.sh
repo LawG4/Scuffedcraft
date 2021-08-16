@@ -22,13 +22,6 @@ echo -e "========================================================="
 
 LOCAL=$(dirname "$0")"/"
 
-
-# Ensure we are running as root for installing things
-if [ "$EUID" -ne 0 ]
-  then echo -e "${TERM_RED}Run this script as root, install sudo and run : \nsudo -E bash install.sh${TERM_NOC}"
-  exit
-fi
-
 # Check if the user has any of the devkit environement variables set.
 # if they don't, set them to a default value and write them to a config
 if [[ -z "${DEVKITPRO}" ]]; then
@@ -44,12 +37,21 @@ if [[ -z "${DEVKITPPC}" ]]; then
 	DEVKITPPC=/opt/devkitpro/devkitPPC
 fi
 
-# Write the config to a shell script we can source from here on out.
+#==================================================================================================
+# Output the DevkitPro variables so that they can be sourced later in the build
+# This keeps the builds consistent without having to force you to worry about environment vars
+#==================================================================================================
+
 echo "Devkit Environment variables :"
 echo -e "DEVKITPRO = ${TERM_YLW}${DEVKITPRO}${TERM_NOC}"
 echo -e "DEVKITARM = ${TERM_YLW}${DEVKITARM}${TERM_NOC}"
 echo -e "DEVKITPPC = ${TERM_YLW}${DEVKITPPC}${TERM_NOC}\n"
 
+# Into the a make file in the build directory so we can use it for builds 
+mkdir -p "${LOCAL}../build"
+echo -e "export DEVKITPRO=${DEVKITPRO}\nexport DEVKITARM=${DEVKITARM}\nexport DEVKITPPC=${DEVKITPPC}" > ${LOCAL}../build/sc_env.mk
+
+# Into a bash script so we can use them for other builds, like GRRLIB
 echo -e "export DEVKITPRO=${DEVKITPRO}\nexport DEVKITARM=${DEVKITARM}\nexport DEVKITPPC=${DEVKITPPC}" > ${LOCAL}sc_env.sh
 echo -e "export PATH=\"${DEVKITPRO}:${DEVKITARM}:${DEVKITPPC}:\$PATH\"" >> ${LOCAL}sc_env.sh
 echo -e "export PATH=\${DEVKITPRO}/tools/bin:\$PATH" >> ${LOCAL}sc_env.sh
@@ -102,7 +104,8 @@ case "$OSTYPE" in
 		PKG_ARG="install"
 		;;
 	msys*)
-		echo -e "${TERM_RED}Detected Windows through msys2 compatability layer, not supported${TERM_NOC}"
+		echo -e "${TERM_YLW}Detected Windows through msys2 compatability layer, I can't install deps for you${TERM_NOC}"
+		return 
 		exit ;;
 	bsd*)
 		echo -e "${TERM_RED}Detected BSD, I'm sure you can figure out installing dependencies${TERM_NOC}"
@@ -124,6 +127,12 @@ fi
 if [[ -z "${SC_HOST_SYSTEM}" ]]; then
 	echo -e "${TERM_RED}Something went wrong determining the system${TERM_NOC}"
 	exit
+fi
+
+# Ensure we are running as root for installing things
+if [ "$EUID" -ne 0 ]
+  then echo -e "${TERM_RED}Run this script as root, install sudo and run : \nsudo -E bash install.sh${TERM_NOC}"
+  exit
 fi
 
 #==================================================================================================

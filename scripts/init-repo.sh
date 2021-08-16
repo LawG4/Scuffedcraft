@@ -1,11 +1,5 @@
 #!/bin/bash 
 
-# Do another root access check
-if [ "$EUID" -ne 0 ]
-  then echo -e "${TERM_RED}Run this script as root, install sudo and run : \nsudo -E bash scripts/init-repo.sh${TERM_NOC}"
-  exit
-fi
-
 # Run the install dependencies script
 LOCAL=$(dirname "$0")"/"
 REPO_ROOT="${LOCAL}../"
