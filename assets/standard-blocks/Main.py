@@ -35,7 +35,7 @@ HeaderFile.write(fileHeader + "#ifndef SC_STANDARD_BLOCK_AUTO_GEN_H \n#define SC
 
 # Add include of the header file to the source file
 SourceFile = open(StandardBlocksSourceFilePath, "w") 
-SourceFile.write(fileHeader + """#include \"../StandardBlocks.c\" \n""")
+SourceFile.write(fileHeader + """#include \"../StandardBlocks.h\" \n""")
 
 
 
@@ -197,7 +197,7 @@ SourceFile.write("const sc_standard_block_indices standardBlocksByID[" + str(blo
 
 # For each block go through each face and write out the indices
 for block in blockData['standard-blocks']:
-	SourceFile.write("\n\t/* " + block['block-name'] + " */\n\tsc_standard_block_indices\n\t\t{")
+	SourceFile.write("\n\t/* " + block['block-name'] + " */\n\t\t{")
 
 	writeIndices("North", block['block-texture-n'])
 	writeIndices("East", block['block-texture-e'])

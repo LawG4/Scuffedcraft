@@ -41,6 +41,14 @@ VPATH += source/Chunks
 INCLUDE_DIRS += -Isource/Chunks
 CFILES += Chunk.c ChunkMemoryManagement.c
 
+# Assets
+# Find all the directories in the assets folder
+ASSET_DIRS = $(sort $(dir $(wildcard source/Assets/*/))) + source/Assets
+VPATH += $(ASSET_DIRS)
+INCLUDE_DIRS += -Isource/Assets
+# Glob all the C files in all the asset directories
+CFILES += $(notdir $(foreach dir,$(ASSET_DIRS), $(wildcard $(dir)*.c)))
+
 #
 # Create a list of flags that will get passed to the compiler 
 # The first being the C flags, the next being the linker flags
