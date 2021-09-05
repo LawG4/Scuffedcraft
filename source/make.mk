@@ -14,7 +14,7 @@ CFILES = Main.c
 # Render subdirectory 
 VPATH += source/Render
 INCLUDE_DIRS += -Isource/Render
-CFILES +=Render.c block.c Mesh.c
+CFILES +=Model.c Mesh.c MeshUtility.c block.c
 
 # Physics subdirectory
 VPATH += source/Physics
@@ -77,6 +77,11 @@ LINK_FLAGS=-lgrrlib -lfreetype -lbz2 -lpngu -lpng -ljpeg -lz -lfat -lwiiuse -lbt
 # Include directories for external headers 
 # libogc the library for interfacing with the Wii hardware
 INCLUDE_DIRS+=-I$(DEVKITPRO)/libogc/include
+# Ported libraries
+INCLUDE_DIRS+=-I$(DEVKITPRO)/portlibs/wii/include
+INCLUDE_DIRS+=-I$(DEVKITPRO)/portlibs/ppc/include
+INCLUDE_DIRS+=-I$(DEVKITPPC)/powerpc-eabi/include
+INCLUDE_DIRS+=-I$(DEVKITPPC)/lib/gcc/powerpc-eabi/10.2.0/include
 # GRRLib the graphics assitance library
 INCLUDE_DIRS+=-Iexternal/GRRLIB/GRRLIB/GRRLIB
 
