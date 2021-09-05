@@ -38,6 +38,11 @@ ScuffedCraft.elf: inform $(OBJ_FILES) $(CFILES)
 	@echo "Linking ..."
 	@$(CC) $(OBJ_FILES) $(CFLAGS) $(LINK_DIRS) $(LINK_FLAGS) -o ScuffedCraft.elf
 	
+# A target that runs the build on dolphin
+run: ScuffedCraft.elf
+	@echo "Launching ..."
+	@$(DOLPHIN_CMD) -b -d ScuffedCraft.elf
+
 # A target to remove all the builds made  
 .PHONY: clean
 clean:
